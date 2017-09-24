@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/sourceLayout"
+        android:tag="SourceArea"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="2dp"
+        android:gravity="center"
+        android:background="#202030"
+        android:orientation="horizontal" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:background="#202020"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/area1"
+                android:tag="Area1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_margin="4dp"
+                android:background="#606060"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:id="@+id/area3"
+                android:tag="Area3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_margin="4dp"
+                android:background="#606060"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:id="@+id/area5"
+                android:tag="Area5"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_margin="4dp"
+                android:background="#606060"
+                android:orientation="vertical"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/area2"
+                android:tag="Area2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_margin="4dp"
+                android:background="#606060"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:id="@+id/area4"
+                android:tag="Area4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_margin="4dp"
+                android:background="#606060"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:id="@+id/area6"
+                android:tag="Area6"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_margin="4dp"
+                android:background="#606060"
+                android:orientation="vertical"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
