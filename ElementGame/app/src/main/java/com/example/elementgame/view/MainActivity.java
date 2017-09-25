@@ -55,11 +55,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupExampleObjects() {
         draggableObjects = new ArrayList<>();
-        draggableObjects.add(draggableObjects.size(), new DraggableObject(draggableObjects.size(), "Alert", getAndroidDrawable(android.R.drawable.ic_dialog_alert)));
-        draggableObjects.add(draggableObjects.size(), new DraggableObject(draggableObjects.size(), "Dialer", getAndroidDrawable(android.R.drawable.ic_dialog_dialer)));
-        draggableObjects.add(draggableObjects.size(), new DraggableObject(draggableObjects.size(), "Email", getAndroidDrawable(android.R.drawable.ic_dialog_email)));
-        draggableObjects.add(draggableObjects.size(), new DraggableObject(draggableObjects.size(), "Info", getAndroidDrawable(android.R.drawable.ic_dialog_info)));
-        draggableObjects.add(draggableObjects.size(), new DraggableObject(draggableObjects.size(), "Map", getAndroidDrawable(android.R.drawable.ic_dialog_map)));
+        draggableObjects.add(draggableObjects.size(), new DraggableObject(draggableObjects.size(), "Earth", getAndroidDrawable(R.drawable.earth_element)));
+        draggableObjects.add(draggableObjects.size(), new DraggableObject(draggableObjects.size(), "Fire", getAndroidDrawable(R.drawable.fire_element)));
+        draggableObjects.add(draggableObjects.size(), new DraggableObject(draggableObjects.size(), "Air", getAndroidDrawable(R.drawable.air_element)));
+        draggableObjects.add(draggableObjects.size(), new DraggableObject(draggableObjects.size(), "Water", getAndroidDrawable(R.drawable.water_element)));
 
         for (DraggableObject obj : draggableObjects) {
             ImageView imageView = new ImageView(this);
