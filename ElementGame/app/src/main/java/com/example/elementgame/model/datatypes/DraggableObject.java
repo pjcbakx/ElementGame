@@ -1,19 +1,21 @@
 package com.example.elementgame.model.datatypes;
 
-import android.graphics.drawable.Drawable;
-
 public class DraggableObject {
     public int getID() {
         return ID;
     }
 
+    public int getDrawable() {
+        return DrawableID;
+    }
+
     private int ID;
     public String Name;
-    public Drawable Drawable;
+    private int DrawableID;
 
-    public DraggableObject(int id, String name, Drawable drawable){
+    public DraggableObject(int id, String name, int drawableID){
         this.ID = id;
         this.Name = name;
-        this.Drawable = drawable;
+        this.DrawableID = drawableID;
     }
 }

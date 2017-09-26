@@ -15,7 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.elementgame.R;
+import com.example.elementgame.model.datatypes.DraggableElement;
 import com.example.elementgame.model.datatypes.DraggableObject;
+import com.example.elementgame.model.datatypes.Element;
 
 import java.util.ArrayList;
 
@@ -54,15 +56,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupExampleObjects() {
+        Element fire = new Element("element_fire", "Fire", 1, R.drawable.fire_element);
+        Element air = new Element("element_air", "Air", 1, R.drawable.air_element);
+        Element earth = new Element("element_earth", "Earth", 1, R.drawable.earth_element);
+        Element water = new Element("element_water", "Water", 1, R.drawable.water_element);
+
         draggableObjects = new ArrayList<>();
-        draggableObjects.add(draggableObjects.size(), new DraggableObject(draggableObjects.size(), "Earth", getAndroidDrawable(R.drawable.earth_element)));
-        draggableObjects.add(draggableObjects.size(), new DraggableObject(draggableObjects.size(), "Fire", getAndroidDrawable(R.drawable.fire_element)));
-        draggableObjects.add(draggableObjects.size(), new DraggableObject(draggableObjects.size(), "Air", getAndroidDrawable(R.drawable.air_element)));
-        draggableObjects.add(draggableObjects.size(), new DraggableObject(draggableObjects.size(), "Water", getAndroidDrawable(R.drawable.water_element)));
+        draggableObjects.add(draggableObjects.size(), new DraggableElement(fire, draggableObjects.size()));
+        draggableObjects.add(draggableObjects.size(), new DraggableElement(air, draggableObjects.size()));
+        draggableObjects.add(draggableObjects.size(), new DraggableElement(earth, draggableObjects.size()));
+        draggableObjects.add(draggableObjects.size(), new DraggableElement(water, draggableObjects.size()));
 
         for (DraggableObject obj : draggableObjects) {
             ImageView imageView = new ImageView(this);
-            imageView.setImageDrawable(obj.Drawable);
+            imageView.setImageDrawable(getAndroidDrawable(obj.getDrawable()));
             imageView.setPadding(10, 0, 10, 0);
             imageView.setId(obj.getID());
             imageView.setOnClickListener(new ClickListener());
@@ -142,9 +149,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             int viewID = view.getId();
-            DraggableObject draggableObject = draggableObjects.get(viewID);
+            DraggableElement draggableElement = (DraggableElement) draggableObjects.get(viewID);
 
-            createAlertDialog("Info", String.format("%s: %s", "Name", draggableObject.Name));
+            createAlertDialog("Element Info", String.format("%s: %s \n%s: %s", "Name", draggableElement.Name, "Tier", draggableElement.getTier()));
         }
     }
 
