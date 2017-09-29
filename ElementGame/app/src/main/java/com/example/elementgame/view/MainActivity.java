@@ -15,17 +15,19 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.elementgame.R;
+import com.example.elementgame.controller.ElementController;
 import com.example.elementgame.model.datatypes.DraggableElement;
 import com.example.elementgame.model.datatypes.DraggableObject;
 import com.example.elementgame.model.datatypes.Element;
+import com.example.elementgame.model.tasks.FileReader;
+import com.example.elementgame.model.types.TaskType;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
-    ArrayList<DraggableObject> draggableObjects;
+public class MainActivity extends ElementActivity {
     @BindView(R.id.area1) LinearLayout area1;
     @BindView(R.id.area2) LinearLayout area2;
     @BindView(R.id.area3) LinearLayout area3;
@@ -33,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.area5) LinearLayout area5;
     @BindView(R.id.area6) LinearLayout area6;
     @BindView(R.id.sourceLayout) LinearLayout sourceLayout;
+
+    private ArrayList<Element> elementList;
+    private ArrayList<DraggableObject> draggableObjects;
+    private FileReader fileReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +49,10 @@ public class MainActivity extends AppCompatActivity {
         initActivity();
     }
 
-    private void initActivity() {
+    protected void initActivity() {
+        ElementController.getInstance().startLoadingTasks(this);
+        elementList = new ArrayList<>();
+
         setupExampleObjects();
 
         sourceLayout.setOnDragListener(new DragListener());
@@ -55,17 +64,32 @@ public class MainActivity extends AppCompatActivity {
         area6.setOnDragListener(new DragListener());
     }
 
+    @Override
+    public void UpdateOnTaskFinished(TaskType taskType, Object data) {
+        try {
+            switch (taskType){
+                case READ_ELEMENTS:
+                    if(data instanceof ArrayList<?>) {
+                        elementList = (ArrayList<Element>) data;
+                        setupExampleObjects();
+                    }
+                    break;
+            }
+        }
+        catch (Exception ex){
+            Log.e(this.getClass().getSimpleName(), String.format("Failed to process results of finished task: %s", ex.getMessage()));
+        }
+    }
+
     private void setupExampleObjects() {
-        Element fire = new Element("element_fire", "Fire", 1, R.drawable.fire_element);
-        Element air = new Element("element_air", "Air", 1, R.drawable.air_element);
-        Element earth = new Element("element_earth", "Earth", 1, R.drawable.earth_element);
-        Element water = new Element("element_water", "Water", 1, R.drawable.water_element);
+        if(elementList == null || elementList.isEmpty()){
+            return;
+        }
 
         draggableObjects = new ArrayList<>();
-        draggableObjects.add(draggableObjects.size(), new DraggableElement(fire, draggableObjects.size()));
-        draggableObjects.add(draggableObjects.size(), new DraggableElement(air, draggableObjects.size()));
-        draggableObjects.add(draggableObjects.size(), new DraggableElement(earth, draggableObjects.size()));
-        draggableObjects.add(draggableObjects.size(), new DraggableElement(water, draggableObjects.size()));
+        for (Element element : elementList) {
+            draggableObjects.add(draggableObjects.size(), new DraggableElement(element, draggableObjects.size()));
+        }
 
         for (DraggableObject obj : draggableObjects) {
             ImageView imageView = new ImageView(this);
