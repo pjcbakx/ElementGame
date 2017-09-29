@@ -1,0 +1,32 @@
+[
+  {
+    "id":"element_unknown",
+    "name":"Unknown",
+    "tier":-1,
+    "image":"unknown_element"
+  },
+  {
+    "id":"element_fire",
+    "name":"Fire",
+    "tier":1,
+    "image":"fire_element"
+  },
+  {
+    "id":"element_water",
+    "name":"Water",
+    "tier":1,
+    "image":"water_element"
+  },
+  {
+    "id":"element_earth",
+    "name":"Earth",
+    "tier":1,
+    "image":"earth_element"
+  },
+  {
+    "id":"element_air",
+    "name":"Air",
+    "tier":1,
+    "image":"air_element"
+  }
+]
