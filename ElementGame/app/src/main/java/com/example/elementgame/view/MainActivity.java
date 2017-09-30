@@ -107,21 +107,23 @@ public class MainActivity extends ElementActivity {
         return getDrawable(id);
     }
 
-    private void createAlertDialog(String title, String message){
+    private void createAlertDialog(String title, String message, String positiveButtonText, String negativeButtonText){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setMessage(message)
                 .setTitle(title);
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User cancelled the dialog
-            }
-        });
+        if(negativeButtonText != null) {
+            builder.setNegativeButton(negativeButtonText, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User cancelled the dialog
+                }
+            });
+        }
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -172,7 +174,7 @@ public class MainActivity extends ElementActivity {
             int viewID = view.getId();
             DraggableElement draggableElement = (DraggableElement) draggableObjects.get(viewID);
 
-            createAlertDialog("Element Info", String.format("%s: %s \n%s: %s", "Name", draggableElement.Name, "Tier", draggableElement.getTier()));
+            createAlertDialog("Element Info", draggableElement.getDialogInformation(), "Back", null);
         }
     }
 
