@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.elementgame.controller.ElementController;
-import com.example.elementgame.model.Constant;
+import com.example.elementgame.controller.FileController;
 import com.example.elementgame.model.datatypes.Element;
 import com.example.elementgame.model.types.TaskType;
 
@@ -24,8 +24,8 @@ public class FileReader {
         return instance;
     }
 
-    public void ReadElementsTask(Context context) {
-        JSONReaderAsyncTask readElementsTask = new JSONReaderAsyncTask(context, TaskType.READ_ELEMENTS, Constant.JSON_FILE_ELEMENTS, true);
+    public void StartJSONReadingTask(Context context, TaskType taskType, String fileName, boolean isJsonArray) {
+        JSONReaderAsyncTask readElementsTask = new JSONReaderAsyncTask(context, taskType, fileName, isJsonArray);
         readElementsTask.execute();
     }
 
@@ -46,36 +46,22 @@ public class FileReader {
         return json;
     }
 
-    private void processReadTaskFinished(Context context, TaskType taskType, Object results){
-        try {
-            switch (taskType){
-                case READ_ELEMENTS:
-                    ElementController.getInstance().processFinishedTask(context, taskType, results);
-                    break;
-            }
-        }
-        catch (Exception ex){
-            Log.e(this.getClass().getSimpleName(), String.format("Failed to finish processing read file: %s", ex.getMessage()));
-        }
-    }
-
     private class JSONReaderAsyncTask extends AsyncTask<String, Void, Object> {
 
         private Context context;
         private TaskType taskType;
-        private String file;
-        private String jsonDocument = null;
+        private String fileName;
         private boolean isJsonArray;
 
-        public JSONReaderAsyncTask(Context context, TaskType taskType, String file, boolean isJsonArray) {
+        public JSONReaderAsyncTask(Context context, TaskType taskType, String fileName, boolean isJsonArray) {
             this.context = context;
             this.taskType = taskType;
-            this.file = file;
+            this.fileName = fileName;
             this.isJsonArray = isJsonArray;
         }
 
         protected void onPostExecute(Object results) {
-            processReadTaskFinished(context, taskType, results);
+            FileController.getInstance().processReadTaskFinished(context, taskType, results);
         }
 
         @Override
@@ -91,7 +77,7 @@ public class FileReader {
 
         private Object readFromFile(){
             try {
-                jsonDocument = loadJSONFromAsset(context.getAssets().open(file));
+                String jsonDocument = loadJSONFromAsset(context.getAssets().open(fileName));
                 if(isJsonArray){
                     return new JSONArray(jsonDocument);
                 }
@@ -99,7 +85,7 @@ public class FileReader {
                     return new JSONObject(jsonDocument);
                 }
             } catch (Exception ex) {
-                Log.e(this.getClass().getSimpleName(), String.format("Exception reading file: %s", ex.getMessage()));
+                Log.e(this.getClass().getSimpleName(), String.format("Exception reading fileName: %s", ex.getMessage()));
             }
 
             return null;
@@ -114,7 +100,7 @@ public class FileReader {
                         ArrayList<Element> elements = new ArrayList<>();
                         JSONArray array = (JSONArray) rawFileData;
                         for (int i = 0; i < array.length(); i++) {
-                            Element element = new Element(context, array.getJSONObject(i));
+                            Element element = new Element(array.getJSONObject(i));
                             elements.add(element);
                         }
 
@@ -123,7 +109,7 @@ public class FileReader {
                 }
             }
             catch (Exception ex){
-                Log.e(this.getClass().getSimpleName(), String.format("Failed to finish processing raw read file data: %s", ex.getMessage()));
+                Log.e(this.getClass().getSimpleName(), String.format("Failed to finish processing raw read fileName data: %s", ex.getMessage()));
             }
 
             return processedFileData;

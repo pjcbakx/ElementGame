@@ -1,6 +1,5 @@
 package com.example.elementgame.model.datatypes;
 
-import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -9,42 +8,38 @@ import org.json.JSONObject;
 public class Element {
     private String ID;
     public String Name;
-    private int AssetID;
+    private String ImageID;
     private int Tier;
 
     public String getID() {
         return ID;
     }
 
-    public int getAssetID() {
-        return AssetID;
+    public String getImageID() {
+        return ImageID;
     }
 
     public int getTier() {
         return Tier;
     }
 
-    public Element(String id, String name, int tier, int assetID){
+    public Element(String id, String name, int tier, String imageID){
         this.ID = id;
         this.Name = name;
         this.Tier = tier;
-        this.AssetID = assetID;
+        this.ImageID = imageID;
     }
 
-    public Element(Context context, JSONObject jsonObject){
-        fillFromJson(context, jsonObject);
+    public Element(JSONObject jsonObject){
+        fillFromJson(jsonObject);
     }
 
-    private void fillFromJson(Context context, JSONObject jsonObject){
+    private void fillFromJson(JSONObject jsonObject){
         try {
             ID = jsonObject.getString("id");
             Name = jsonObject.getString("name");
             Tier = jsonObject.getInt("tier");
-
-            AssetID = context.getResources().getIdentifier(jsonObject.getString("image"), "drawable", context.getPackageName());
-            if(AssetID == 0){
-                AssetID = context.getResources().getIdentifier("unknown_element", "drawable", context.getPackageName());
-            }
+            ImageID = jsonObject.isNull("image") ? "unknown_element" : jsonObject.getString("image");
         }
         catch (JSONException ex){
             Log.e(this.getClass().getSimpleName(), String.format("Failed get Element info from JSON: %s", ex.getMessage()));

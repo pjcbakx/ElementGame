@@ -4,9 +4,8 @@ import android.content.ClipData;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
@@ -19,7 +18,6 @@ import com.example.elementgame.controller.ElementController;
 import com.example.elementgame.model.datatypes.DraggableElement;
 import com.example.elementgame.model.datatypes.DraggableObject;
 import com.example.elementgame.model.datatypes.Element;
-import com.example.elementgame.model.tasks.FileReader;
 import com.example.elementgame.model.types.TaskType;
 
 import java.util.ArrayList;
@@ -38,7 +36,6 @@ public class MainActivity extends ElementActivity {
 
     private ArrayList<Element> elementList;
     private ArrayList<DraggableObject> draggableObjects;
-    private FileReader fileReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +85,7 @@ public class MainActivity extends ElementActivity {
 
         draggableObjects = new ArrayList<>();
         for (Element element : elementList) {
-            draggableObjects.add(draggableObjects.size(), new DraggableElement(element, draggableObjects.size()));
+            draggableObjects.add(draggableObjects.size(), new DraggableElement(this, element, draggableObjects.size()));
         }
 
         for (DraggableObject obj : draggableObjects) {

@@ -3,7 +3,6 @@ package com.example.elementgame.controller;
 import android.content.Context;
 
 import com.example.elementgame.model.datatypes.Element;
-import com.example.elementgame.model.tasks.FileReader;
 import com.example.elementgame.model.types.TaskType;
 import com.example.elementgame.view.ElementActivity;
 
@@ -20,7 +19,7 @@ public class ElementController {
     }
 
     public void startLoadingTasks(Context context){
-        FileReader.getInstance().ReadElementsTask(context);
+        FileController.getInstance().ReadElementsTask(context);
     }
 
     public void processFinishedTask(Context context, TaskType taskType, Object result){
