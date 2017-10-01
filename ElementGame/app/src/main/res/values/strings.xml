@@ -1,6 +1,4 @@
 <resources>
     <string name="app_name">Element Game</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="section_format">Page: %1$d</string>
 </resources>
