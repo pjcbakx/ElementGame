@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.elementgame.R;
+import com.example.elementgame.view.adapters.MyRecyclerAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -102,6 +105,11 @@ public class OptionActivity extends AppCompatActivity {
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
+        RecyclerView recyclerView;
+        GridLayoutManager layoutManager;
+        private String nameList[] = {"Air test", "Fire test", "Earth test", "Water test"};
+        private int iconList[] = {R.drawable.air_element, R.drawable.fire_element, R.drawable.earth_element, R.drawable.water_element};
+
         public PlaceholderFragment() {
         }
 
@@ -121,6 +129,15 @@ public class OptionActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_option, container, false);
+
+            recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+            layoutManager = new GridLayoutManager(getContext(), 2);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(layoutManager);
+
+            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getContext(), iconList, nameList);
+            recyclerView.setAdapter(adapter);
+
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
