@@ -5,7 +5,9 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Element {
+import java.io.Serializable;
+
+public class Element implements Serializable{
     private String ID;
     public String Name;
     private String ImageID;

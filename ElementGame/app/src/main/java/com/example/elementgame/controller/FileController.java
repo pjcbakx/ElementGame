@@ -20,10 +20,15 @@ public class FileController {
         FileReader.getInstance().StartJSONReadingTask(context, TaskType.READ_ELEMENTS, Constant.JSON_FILE_ELEMENTS, true);
     }
 
+    public void ReadElementLevelsTask(Context context) {
+        FileReader.getInstance().StartJSONReadingTask(context, TaskType.READ_ELEMENT_LEVELS, Constant.JSON_FILE_ELEMENT_LEVELS, true);
+    }
+
     public void processReadTaskFinished(Context context, TaskType taskType, Object results){
         try {
             switch (taskType){
                 case READ_ELEMENTS:
+                case READ_ELEMENT_LEVELS:
                     ElementController.getInstance().processFinishedTask(context, taskType, results);
                     break;
             }

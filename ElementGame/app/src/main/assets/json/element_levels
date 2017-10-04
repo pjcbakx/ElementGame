@@ -1,0 +1,20 @@
+[
+  {
+    "name":"Fire level",
+    "icon":"fire_element",
+    "resource_elements": [
+      "element_fire",
+      "element_water"
+    ],
+    "goal_element":"element_air"
+  },
+  {
+    "name":"Water level",
+    "icon":"water_element",
+    "resource_elements": [
+      "element_air",
+      "element_water"
+    ],
+    "goal_element":"element_earth"
+  }
+]

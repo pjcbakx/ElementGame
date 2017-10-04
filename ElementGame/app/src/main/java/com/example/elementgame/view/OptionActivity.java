@@ -1,7 +1,6 @@
 package com.example.elementgame.view;
 
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +17,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.elementgame.R;
+import com.example.elementgame.controller.ElementController;
+import com.example.elementgame.model.datatypes.ElementLevel;
+import com.example.elementgame.model.types.TaskType;
 import com.example.elementgame.view.adapters.MyRecyclerAdapter;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class OptionActivity extends AppCompatActivity {
+public class OptionActivity extends ElementActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -38,6 +43,10 @@ public class OptionActivity extends AppCompatActivity {
     @BindView(R.id.previous_button)FloatingActionButton previousButton;
     @BindView(R.id.next_button)FloatingActionButton nextButton;
     private int currentPage;
+    private ArrayList<ElementLevel> elementLevels;
+
+    protected static String[] nameList = {"Air test", "Fire test", "Earth test", "Water test"};
+    protected static int[] iconList = {R.drawable.air_element, R.drawable.fire_element, R.drawable.earth_element, R.drawable.water_element};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +55,16 @@ public class OptionActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        initActivity();
+    }
+
+    @Override
+    protected void initActivity() {
+        elementLevels = (ArrayList<ElementLevel>) getIntent().getSerializableExtra("Levels");
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), elementLevels);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -73,6 +89,35 @@ public class OptionActivity extends AppCompatActivity {
         });
 
         checkButtons();
+        ElementController.getInstance().startLoadingTasks(this);
+    }
+
+    @Override
+    public void UpdateOnTaskFinished(TaskType taskType, Object data) {
+        try {
+            switch (taskType){
+                case READ_ELEMENTS:
+                    ElementController.getInstance().startLoadingLevels(this);
+                    break;
+                case READ_ELEMENT_LEVELS:
+                    if(data instanceof ArrayList<?>) {
+                        ArrayList<ElementLevel> elementLevels = (ArrayList<ElementLevel>) data;
+
+                        nameList = new String[elementLevels.size()];
+                        iconList = new int[elementLevels.size()];
+                        for (ElementLevel elementLevel : elementLevels) {
+                            nameList[nameList.length] = elementLevel.getName();
+                            iconList[iconList.length] = getResources().getIdentifier(elementLevel.getIconID(), "drawable", getPackageName());
+                        }
+
+                        mSectionsPagerAdapter.notifyDataSetChanged();
+                    }
+                    break;
+            }
+        }
+        catch (Exception ex){
+            Log.e(this.getClass().getSimpleName(), String.format("Failed to process results of finished task: %s", ex.getMessage()));
+        }
     }
 
     private int getItem(int i) {
@@ -107,8 +152,6 @@ public class OptionActivity extends AppCompatActivity {
 
         RecyclerView recyclerView;
         GridLayoutManager layoutManager;
-        private String nameList[] = {"Air test", "Fire test", "Earth test", "Water test"};
-        private int iconList[] = {R.drawable.air_element, R.drawable.fire_element, R.drawable.earth_element, R.drawable.water_element};
 
         public PlaceholderFragment() {
         }
@@ -150,8 +193,10 @@ public class OptionActivity extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        private ArrayList<ElementLevel> elementLevels;
+        public SectionsPagerAdapter(FragmentManager fm, ArrayList<ElementLevel> elementLevels) {
             super(fm);
+            this.elementLevels = elementLevels;
         }
 
         @Override
@@ -165,10 +210,19 @@ public class OptionActivity extends AppCompatActivity {
         public int getCount() {
             // Show 3 total pages.
             return 3;
+            //return (int) Math.ceil(elementLevels.size() / 16);
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return super.getItemPosition(object);
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
+            /*if(position < getCount()) {
+                return String.format("SECTION %d", position + 1);
+            }*/
             switch (position) {
                 case 0:
                     return "SECTION 1";

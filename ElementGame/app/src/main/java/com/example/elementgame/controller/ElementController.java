@@ -3,6 +3,7 @@ package com.example.elementgame.controller;
 import android.content.Context;
 
 import com.example.elementgame.model.datatypes.Element;
+import com.example.elementgame.model.datatypes.ElementLevel;
 import com.example.elementgame.model.types.TaskType;
 import com.example.elementgame.view.ElementActivity;
 
@@ -12,6 +13,7 @@ public class ElementController {
     private static ElementController instance;
 
     private ArrayList<Element> elements;
+    private ArrayList<ElementLevel> elementLevels;
 
     public static ElementController getInstance() {
         if(instance == null) instance = new ElementController();
@@ -22,12 +24,22 @@ public class ElementController {
         FileController.getInstance().ReadElementsTask(context);
     }
 
+    public void startLoadingLevels(Context context){
+        FileController.getInstance().ReadElementLevelsTask(context);
+    }
+
     public void processFinishedTask(Context context, TaskType taskType, Object result){
         switch (taskType){
             case READ_ELEMENTS:
                 elements = (ArrayList<Element>) result;
                 if(context instanceof ElementActivity){
                     ((ElementActivity)context).UpdateOnTaskFinished(taskType, elements);
+                }
+                break;
+            case READ_ELEMENT_LEVELS:
+                elementLevels = (ArrayList<ElementLevel>) result;
+                if(context instanceof ElementActivity){
+                    ((ElementActivity)context).UpdateOnTaskFinished(taskType, elementLevels);
                 }
                 break;
         }

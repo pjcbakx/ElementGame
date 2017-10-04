@@ -7,6 +7,7 @@ import android.util.Log;
 import com.example.elementgame.controller.ElementController;
 import com.example.elementgame.controller.FileController;
 import com.example.elementgame.model.datatypes.Element;
+import com.example.elementgame.model.datatypes.ElementLevel;
 import com.example.elementgame.model.types.TaskType;
 
 import org.json.JSONArray;
@@ -93,18 +94,28 @@ public class FileReader {
 
         private Object processRawFileData(Object rawFileData){
             Object processedFileData = null;
-
+            JSONArray array = null;
             try {
                 switch (taskType) {
                     case READ_ELEMENTS:
                         ArrayList<Element> elements = new ArrayList<>();
-                        JSONArray array = (JSONArray) rawFileData;
+                        array = (JSONArray) rawFileData;
                         for (int i = 0; i < array.length(); i++) {
                             Element element = new Element(array.getJSONObject(i));
                             elements.add(element);
                         }
 
                         processedFileData = elements;
+                        break;
+                    case READ_ELEMENT_LEVELS:
+                        ArrayList<ElementLevel> elementLevels = new ArrayList<>();
+                        array = (JSONArray) rawFileData;
+                        for (int i = 0; i < array.length(); i++) {
+                            ElementLevel elementLevel = new ElementLevel(array.getJSONObject(i));
+                            elementLevels.add(elementLevel);
+                        }
+
+                        processedFileData = elementLevels;
                         break;
                 }
             }

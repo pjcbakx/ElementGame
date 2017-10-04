@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Element Game</string>
     <string name="section_format">Page: %1$d</string>
+    <string name="title_activity_splash">SplashActivity</string>
 </resources>
