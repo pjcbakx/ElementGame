@@ -32,7 +32,7 @@ public class ElementLevel implements Serializable {
     private void fillFromJson(JSONObject jsonObject){
         try {
             Name = jsonObject.getString("name");
-            IconID = jsonObject.isNull("image") ? "unknown_element" : jsonObject.getString("image");
+            IconID = jsonObject.isNull("icon") ? "unknown_element" : jsonObject.getString("icon");
 
             String goalElementID  = jsonObject.getString("goal_element");
             GoalElement = ElementController.getInstance().getElement(goalElementID);

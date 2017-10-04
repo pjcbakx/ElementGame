@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.elementgame.R;
-import com.example.elementgame.controller.ElementController;
 import com.example.elementgame.model.datatypes.ElementLevel;
 import com.example.elementgame.model.types.TaskType;
 import com.example.elementgame.view.adapters.MyRecyclerAdapter;
@@ -44,9 +42,6 @@ public class OptionActivity extends ElementActivity {
     @BindView(R.id.next_button)FloatingActionButton nextButton;
     private int currentPage;
     private ArrayList<ElementLevel> elementLevels;
-
-    protected static String[] nameList = {"Air test", "Fire test", "Earth test", "Water test"};
-    protected static int[] iconList = {R.drawable.air_element, R.drawable.fire_element, R.drawable.earth_element, R.drawable.water_element};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,30 +88,6 @@ public class OptionActivity extends ElementActivity {
 
     @Override
     public void UpdateOnTaskFinished(TaskType taskType, Object data) {
-        try {
-            switch (taskType){
-                case READ_ELEMENTS:
-                    ElementController.getInstance().startLoadingLevels(this);
-                    break;
-                case READ_ELEMENT_LEVELS:
-                    if(data instanceof ArrayList<?>) {
-                        ArrayList<ElementLevel> elementLevels = (ArrayList<ElementLevel>) data;
-
-                        nameList = new String[elementLevels.size()];
-                        iconList = new int[elementLevels.size()];
-                        for (ElementLevel elementLevel : elementLevels) {
-                            nameList[nameList.length] = elementLevel.getName();
-                            iconList[iconList.length] = getResources().getIdentifier(elementLevel.getIconID(), "drawable", getPackageName());
-                        }
-
-                        mSectionsPagerAdapter.notifyDataSetChanged();
-                    }
-                    break;
-            }
-        }
-        catch (Exception ex){
-            Log.e(this.getClass().getSimpleName(), String.format("Failed to process results of finished task: %s", ex.getMessage()));
-        }
     }
 
     private int getItem(int i) {
@@ -148,6 +119,9 @@ public class OptionActivity extends ElementActivity {
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private static final String ARG_ELEMENT_LEVELS = "element_levels";
+        private String[] nameList = {"Air test", "Fire test", "Earth test", "Water test"};
+        private int[] iconList = {R.drawable.air_element, R.drawable.fire_element, R.drawable.earth_element, R.drawable.water_element};
 
         RecyclerView recyclerView;
         GridLayoutManager layoutManager;
@@ -159,10 +133,11 @@ public class OptionActivity extends ElementActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
+        public static PlaceholderFragment newInstance(int sectionNumber, ArrayList<ElementLevel> elementLevelsSection) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            args.putSerializable(ARG_ELEMENT_LEVELS, elementLevelsSection);
             fragment.setArguments(args);
             return fragment;
         }
@@ -176,6 +151,19 @@ public class OptionActivity extends ElementActivity {
             layoutManager = new GridLayoutManager(getContext(), 2);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(layoutManager);
+
+
+            ArrayList<ElementLevel> elementLevelsSection = (ArrayList<ElementLevel>)getArguments().getSerializable(ARG_ELEMENT_LEVELS);
+            if(elementLevelsSection == null){
+                elementLevelsSection = new ArrayList<>();
+            }
+
+            nameList = new String[elementLevelsSection.size()];
+            iconList = new int[elementLevelsSection.size()];
+            for(int i = 0; i < elementLevelsSection.size(); i++){
+                nameList[i] = elementLevelsSection.get(i).getName();
+                iconList[i] = getResources().getIdentifier(elementLevelsSection.get(i).getIconID(), "drawable", getContext().getPackageName());
+            }
 
             MyRecyclerAdapter adapter = new MyRecyclerAdapter(getContext(), iconList, nameList);
             recyclerView.setAdapter(adapter);
@@ -193,6 +181,7 @@ public class OptionActivity extends ElementActivity {
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private ArrayList<ElementLevel> elementLevels;
+        private int viewsPerPage = 16;
         public SectionsPagerAdapter(FragmentManager fm, ArrayList<ElementLevel> elementLevels) {
             super(fm);
             this.elementLevels = elementLevels;
@@ -202,14 +191,23 @@ public class OptionActivity extends ElementActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            ArrayList<ElementLevel> elementLevelsSection = new ArrayList<>();
+
+            int loopUntil = viewsPerPage * (position + 1);
+            if(elementLevels.size() < viewsPerPage) {
+                loopUntil = elementLevels.size();
+            }
+
+            for (int i = viewsPerPage * position; i < loopUntil; i++)
+                elementLevelsSection.add(elementLevels.get(i));
+
+            return PlaceholderFragment.newInstance(position + 1, elementLevelsSection);
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
-            //return (int) Math.ceil(elementLevels.size() / 16);
+            return (int) Math.ceil((double)elementLevels.size() / viewsPerPage);
         }
 
         @Override
@@ -219,16 +217,8 @@ public class OptionActivity extends ElementActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            /*if(position < getCount()) {
+            if(position < getCount()) {
                 return String.format("SECTION %d", position + 1);
-            }*/
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
             }
             return null;
         }
