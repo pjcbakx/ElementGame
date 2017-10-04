@@ -89,7 +89,6 @@ public class OptionActivity extends ElementActivity {
         });
 
         checkButtons();
-        ElementController.getInstance().startLoadingTasks(this);
     }
 
     @Override
