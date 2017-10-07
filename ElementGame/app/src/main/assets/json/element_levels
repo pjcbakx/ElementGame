@@ -1,6 +1,6 @@
 [
   {
-    "name":"Fire level",
+    "name":"Hot as Fire",
     "icon":"fire_element",
     "resource_elements": [
       "element_fire",
@@ -9,12 +9,48 @@
     "goal_element":"element_air"
   },
   {
-    "name":"Water level",
+    "name":"Liquid as Water",
     "icon":"water_element",
     "resource_elements": [
       "element_air",
       "element_water"
     ],
     "goal_element":"element_earth"
+  },
+  {
+    "name":"Quick as Air",
+    "icon":"air_element",
+    "resource_elements": [
+      "element_fire",
+      "element_earth"
+    ],
+    "goal_element":"element_air"
+  },
+  {
+    "name":"Shaking as Earth",
+    "icon":"earth_element",
+    "resource_elements": [
+      "element_air",
+      "element_water"
+    ],
+    "goal_element":"element_earth"
+  },
+  {
+    "name":"Life coming through",
+    "icon":"plant_element",
+    "resource_elements": [
+      "element_earth",
+      "element_water"
+    ],
+    "goal_element":"element_plant"
+  },
+  {
+    "name":"Cold as Ice",
+    "icon":"unknown_element",
+    "resource_elements": [
+      "element_air",
+      "element_fire"
+    ],
+    "goal_element":"element_water"
   }
 ]

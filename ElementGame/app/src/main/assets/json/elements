@@ -28,5 +28,11 @@
     "name":"Air",
     "tier":1,
     "image":"air_element"
+  },
+  {
+    "id":"element_plant",
+    "name":"Plant life",
+    "tier":2,
+    "image":"plant_element"
   }
 ]
