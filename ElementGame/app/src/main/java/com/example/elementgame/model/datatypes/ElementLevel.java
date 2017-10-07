@@ -22,6 +22,15 @@ public class ElementLevel implements Serializable {
 
     private String Name;
     private String IconID;
+
+    public ArrayList<Element> getResourceElements() {
+        return ResourceElements;
+    }
+
+    public Element getGoalElement() {
+        return GoalElement;
+    }
+
     private ArrayList<Element> ResourceElements;
     private Element GoalElement;
 

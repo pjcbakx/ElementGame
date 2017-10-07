@@ -18,6 +18,7 @@ import com.example.elementgame.controller.ElementController;
 import com.example.elementgame.model.datatypes.DraggableElement;
 import com.example.elementgame.model.datatypes.DraggableObject;
 import com.example.elementgame.model.datatypes.Element;
+import com.example.elementgame.model.datatypes.ElementLevel;
 import com.example.elementgame.model.types.TaskType;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends ElementActivity {
+public class LevelActivity extends ElementActivity {
     @BindView(R.id.area1) LinearLayout area1;
     @BindView(R.id.area2) LinearLayout area2;
     @BindView(R.id.area3) LinearLayout area3;
@@ -36,19 +37,20 @@ public class MainActivity extends ElementActivity {
 
     private ArrayList<Element> elementList;
     private ArrayList<DraggableObject> draggableObjects;
+    private ElementLevel levelDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_level);
         ButterKnife.bind(this);
 
         initActivity();
     }
 
     protected void initActivity() {
-        ElementController.getInstance().startLoadingTasks(this);
-        elementList = new ArrayList<>();
+        levelDetails = (ElementLevel) getIntent().getSerializableExtra("Level");
+        elementList = levelDetails.getResourceElements();
 
         setupExampleObjects();
 
@@ -108,7 +110,7 @@ public class MainActivity extends ElementActivity {
     }
 
     private void createAlertDialog(String title, String message, String positiveButtonText, String negativeButtonText){
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(LevelActivity.this);
         builder.setMessage(message)
                 .setTitle(title);
 
@@ -130,7 +132,7 @@ public class MainActivity extends ElementActivity {
     }
 
     private void createOptionAlertDialog(String title, String[] options){
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(LevelActivity.this);
         builder.setItems(options, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // The 'which' argument contains the index position
@@ -215,7 +217,7 @@ public class MainActivity extends ElementActivity {
                                 createOptionAlertDialog(String.format("What do you want to do with %s on %s", draggableObject.Name, destinationObject.Name), options);
                             }
                             else {
-                                Toast.makeText(MainActivity.this, "Problem getting draggable object", Toast.LENGTH_LONG).show();
+                                Toast.makeText(LevelActivity.this, "Problem getting draggable object", Toast.LENGTH_LONG).show();
                             }
                         }
                     }

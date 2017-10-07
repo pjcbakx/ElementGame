@@ -1,5 +1,6 @@
 package com.example.elementgame.view;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 
 import android.support.v4.app.Fragment;
@@ -18,14 +19,14 @@ import android.widget.TextView;
 import com.example.elementgame.R;
 import com.example.elementgame.model.datatypes.ElementLevel;
 import com.example.elementgame.model.types.TaskType;
-import com.example.elementgame.view.adapters.MyRecyclerAdapter;
+import com.example.elementgame.view.adapters.ElementLevelAdapter;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class OptionActivity extends ElementActivity {
+public class OptionActivity extends ElementActivity implements ElementLevelAdapter.OnItemClickListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -59,7 +60,7 @@ public class OptionActivity extends ElementActivity {
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), elementLevels);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), elementLevels, this);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -110,6 +111,15 @@ public class OptionActivity extends ElementActivity {
         }
     }
 
+    @Override
+    public void onItemClick(ElementLevel item) {
+        Intent i = new Intent(OptionActivity.this, LevelActivity.class);
+        i.putExtra("Level", item);
+        startActivity(i);
+        overridePendingTransition(0, 0);
+        finish();
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -120,8 +130,7 @@ public class OptionActivity extends ElementActivity {
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static final String ARG_ELEMENT_LEVELS = "element_levels";
-        private String[] nameList = {"Air test", "Fire test", "Earth test", "Water test"};
-        private int[] iconList = {R.drawable.air_element, R.drawable.fire_element, R.drawable.earth_element, R.drawable.water_element};
+        private static final String ARG_LISTENER = "listener";
 
         RecyclerView recyclerView;
         GridLayoutManager layoutManager;
@@ -133,11 +142,12 @@ public class OptionActivity extends ElementActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber, ArrayList<ElementLevel> elementLevelsSection) {
+        public static PlaceholderFragment newInstance(int sectionNumber, ArrayList<ElementLevel> elementLevelsSection, ElementLevelAdapter.OnItemClickListener listener) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             args.putSerializable(ARG_ELEMENT_LEVELS, elementLevelsSection);
+            args.putSerializable(ARG_LISTENER, listener);
             fragment.setArguments(args);
             return fragment;
         }
@@ -158,14 +168,8 @@ public class OptionActivity extends ElementActivity {
                 elementLevelsSection = new ArrayList<>();
             }
 
-            nameList = new String[elementLevelsSection.size()];
-            iconList = new int[elementLevelsSection.size()];
-            for(int i = 0; i < elementLevelsSection.size(); i++){
-                nameList[i] = elementLevelsSection.get(i).getName();
-                iconList[i] = getResources().getIdentifier(elementLevelsSection.get(i).getIconID(), "drawable", getContext().getPackageName());
-            }
-
-            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getContext(), iconList, nameList);
+            ElementLevelAdapter.OnItemClickListener listener = (ElementLevelAdapter.OnItemClickListener)getArguments().getSerializable(ARG_LISTENER);
+            ElementLevelAdapter adapter = new ElementLevelAdapter(getContext(), elementLevelsSection, listener);
             recyclerView.setAdapter(adapter);
 
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
@@ -178,13 +182,15 @@ public class OptionActivity extends ElementActivity {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentPagerAdapter{
 
         private ArrayList<ElementLevel> elementLevels;
+        private ElementLevelAdapter.OnItemClickListener listener;
         private int viewsPerPage = 16;
-        public SectionsPagerAdapter(FragmentManager fm, ArrayList<ElementLevel> elementLevels) {
+        public SectionsPagerAdapter(FragmentManager fm, ArrayList<ElementLevel> elementLevels, ElementLevelAdapter.OnItemClickListener listener) {
             super(fm);
             this.elementLevels = elementLevels;
+            this.listener = listener;
         }
 
         @Override
@@ -201,7 +207,7 @@ public class OptionActivity extends ElementActivity {
             for (int i = viewsPerPage * position; i < loopUntil; i++)
                 elementLevelsSection.add(elementLevels.get(i));
 
-            return PlaceholderFragment.newInstance(position + 1, elementLevelsSection);
+            return PlaceholderFragment.newInstance(position + 1, elementLevelsSection, listener);
         }
 
         @Override
@@ -222,5 +228,7 @@ public class OptionActivity extends ElementActivity {
             }
             return null;
         }
+
+
     }
 }
