@@ -186,7 +186,7 @@ public class OptionActivity extends ElementActivity implements ElementLevelAdapt
 
         private ArrayList<ElementLevel> elementLevels;
         private ElementLevelAdapter.OnItemClickListener listener;
-        private int viewsPerPage = 16;
+        private int viewsPerPage = 8;
         public SectionsPagerAdapter(FragmentManager fm, ArrayList<ElementLevel> elementLevels, ElementLevelAdapter.OnItemClickListener listener) {
             super(fm);
             this.elementLevels = elementLevels;
@@ -200,7 +200,7 @@ public class OptionActivity extends ElementActivity implements ElementLevelAdapt
             ArrayList<ElementLevel> elementLevelsSection = new ArrayList<>();
 
             int loopUntil = viewsPerPage * (position + 1);
-            if(elementLevels.size() < viewsPerPage) {
+            if(elementLevels.size() < viewsPerPage * (position + 1)) {
                 loopUntil = elementLevels.size();
             }
 
