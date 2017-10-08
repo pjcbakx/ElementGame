@@ -1,4 +1,4 @@
-package com.example.elementgame.view;
+package com.example.elementgame.view.customview;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
@@ -9,13 +9,13 @@ import android.widget.Scroller;
 
 import java.lang.reflect.Field;
 
-public class NonSwipeableViewPager extends ViewPager {
-    public NonSwipeableViewPager(Context context) {
+public class NonSwipeAbleViewPager extends ViewPager {
+    public NonSwipeAbleViewPager(Context context) {
         super(context);
         setMyScroller();
     }
 
-    public NonSwipeableViewPager(Context context, AttributeSet attrs) {
+    public NonSwipeAbleViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         setMyScroller();
     }

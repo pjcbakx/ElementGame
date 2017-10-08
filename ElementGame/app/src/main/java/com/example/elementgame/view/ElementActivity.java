@@ -6,4 +6,10 @@ import com.example.elementgame.model.types.TaskType;
 public abstract class ElementActivity extends AppCompatActivity {
     protected abstract void initActivity();
     public abstract void UpdateOnTaskFinished(TaskType taskType, Object data);
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, 0);
+    }
 }

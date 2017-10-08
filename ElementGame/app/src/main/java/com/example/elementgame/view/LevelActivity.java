@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.elementgame.R;
-import com.example.elementgame.controller.ElementController;
 import com.example.elementgame.model.datatypes.DraggableElement;
 import com.example.elementgame.model.datatypes.DraggableObject;
 import com.example.elementgame.model.datatypes.Element;
